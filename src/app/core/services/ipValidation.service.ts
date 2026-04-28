@@ -28,15 +28,20 @@ export class IpValidationService {
       // 3. Lógica de comparação:
       // Se o IP da internet for igual ao IP que o DDNS aponta,
       // significa que o usuário está na rede local.
+      let finalTarget: string;
       if (internetIP === ddnsIP) {
-        return `http://192.168.40.202:${this.PORT}`;
+        finalTarget = `http://192.168.40.202:${this.PORT}`;
+      } else {
+        finalTarget = `http://${this.DDNS_NAME}:${this.PORT}`;
       }
 
-      return `http://${this.DDNS_NAME}:${this.PORT}`;
+      // Retorna a URL através do nosso proxy seguro para evitar erros de Mixed Content
+      return `/api/proxy-boleto?target=${encodeURIComponent(finalTarget)}`;
     } catch (error) {
-      // Caso ocorra erro (ex: bloqueio de CORS ou DNS), redireciona para o DDNS por padrão
+      // Caso ocorra erro (ex: bloqueio de CORS ou DNS), redireciona para o DDNS via proxy por padrão
       console.error('Erro na validação de IP:', error);
-      return `http://${this.DDNS_NAME}:${this.PORT}`;
+      const fallbackTarget = `http://${this.DDNS_NAME}:${this.PORT}`;
+      return `/api/proxy-boleto?target=${encodeURIComponent(fallbackTarget)}`;
     }
   }
 }

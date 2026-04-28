@@ -57,7 +57,22 @@ API endpoints are managed via environment files:
 - `src/environments/environment.prod.ts` (Production)
 
 ## 🏗️ Block System (CMS Logic)
-The portal uses a `ContentBlock` architecture. Each page/post is composed of an array of blocks.
-- **Block Types:** `HEADER`, `TEXT`, `IMAGE`, `COMPARISON`, `CHECKLIST`, `MODULE_HIGHLIGHT`, `ALERT`, `TIMELINE`, `YOUTUBE`.
-- **Manager:** `BlockManagerComponent` handles the editing interface for these blocks in the admin area.
+...
 - **Renderer:** `BlockRendererComponent` handles the display in the public area.
+
+## 🛠️ Soluções Técnicas & IA (Angular 21)
+
+### Correção de Mixed Content (Boleto)
+- **Problema:** O portal roda em HTTPS, mas os sistemas de boleto legados rodam em HTTP, causando bloqueio no iframe.
+- **Solução:** Implementado um **Proxy Reverso Dinâmico** no servidor SSR (`src/server.ts`) usando `http-proxy-middleware`. 
+- **Fluxo:** O `IpValidationService` agora gera URLs no formato `/api/proxy-boleto?target=...`, que o servidor redireciona com segurança, removendo cabeçalhos restritivos como `X-Frame-Options`.
+
+### Agentic UI & IA
+- **@angular/aria:** Instalado para fornecer a base de componentes *headless* e acessíveis, otimizados para manipulação por agentes de IA.
+- **Agentic Workflows:** O projeto está preparado para integração com o protocolo AG-UI e ferramentas como Google Genkit para interfaces generativas.
+
+## 📚 Documentação de Referência
+- [Angular 21 AI & Agents](https://angular.dev/ai)
+- [Model Context Protocol (MCP)](https://modelcontextprotocol.io)
+- [Server-Side Rendering (SSR) Guide](https://v21.angular.dev/guide/ssr)
+

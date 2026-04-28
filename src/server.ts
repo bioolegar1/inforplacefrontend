@@ -7,11 +7,40 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
+
+// Proxy dinâmico para o boleto (HTTP para HTTPS)
+app.use('/api/proxy-boleto', (req, res, next) => {
+  const target = req.query['target'] as string;
+  if (!target) {
+    return res.status(400).send('Target URL is required');
+  }
+
+  return createProxyMiddleware({
+    target: target,
+    changeOrigin: true,
+    secure: false, // Permite conexões HTTP/auto-assinadas no destino
+    pathRewrite: {
+      '^/api/proxy-boleto': '', // Remove o prefixo ao enviar para o destino
+    },
+    on: {
+      proxyRes: (proxyRes, req, res) => {
+        // Remove headers que podem impedir a exibição em iframe
+        delete proxyRes.headers['x-frame-options'];
+        delete proxyRes.headers['content-security-policy'];
+      },
+      error: (err, req, res) => {
+        console.error('Proxy Error:', err);
+      }
+    }
+  })(req, res, next);
+});
+
 const angularApp = new AngularNodeAppEngine();
 
 app.use(
