@@ -13,20 +13,10 @@ import { IpValidationService } from '../../../../core/services/ipValidation.serv
   styleUrls: ['./safe-wrapper.component.css']
 })
 export class SafeWrapperComponent implements OnInit {
-  // Variável declarada corretamente como SafeResourceUrl ou nula
-  iframeUrl: SafeResourceUrl | null = null;
+  constructor() {}
 
-  constructor(
-    private ipService: IpValidationService,
-    private sanitizer: DomSanitizer
-  ) {}
-
-  async ngOnInit() {
-    // Chamada assíncrona para buscar a URL baseada no IP
-    const url = await this.ipService.getFinalUrl();
-
-    // O DomSanitizer é usado para validar que a URL é segura,
-    // permitindo que o Angular a insira no src do iframe sem bloqueios de segurança.
-    this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  ngOnInit() {
+    // Redireciona o usuário diretamente para o sistema de boletos
+    window.location.href = 'http://inforplace.ddns.net:12019/';
   }
 }
