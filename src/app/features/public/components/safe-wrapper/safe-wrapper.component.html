@@ -1,14 +1,29 @@
-<div class="container">
-  @if (iframeUrl) {
-    <iframe
-      [src]="iframeUrl"
-      width="100%"
-      height="700px"
-      frameborder="0">
-    </iframe>
-  } @else {
-    <div>
-      Carregando conexão...
+<div class="w-full bg-gray-50 flex flex-col items-center py-8">
+  <div class="container max-w-7xl px-4">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+      <!-- Cabeçalho da Janela -->
+      <div class="bg-gray-100 px-6 py-3 border-b border-gray-200 flex items-center justify-between">
+        <span class="text-sm font-medium text-gray-600">Sistema Inforplace - Gerador de Boleto</span>
+        <div class="flex space-x-2">
+          <div class="w-3 h-3 rounded-full bg-red-400"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+          <div class="w-3 h-3 rounded-full bg-green-400"></div>
+        </div>
+      </div>
+
+      <!-- Iframe -->
+      @if (iframeUrl) {
+        <iframe
+          [src]="iframeUrl"
+          class="w-full min-h-[800px]"
+          frameborder="0">
+        </iframe>
+      } @else {
+        <div class="flex flex-col items-center justify-center py-20">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mb-4"></div>
+          <p class="text-gray-500">Conectando ao servidor seguro...</p>
+        </div>
+      }
     </div>
-  }
+  </div>
 </div>
