@@ -20,6 +20,7 @@ export class IpValidationService {
     }
 
     // Na Vercel, passamos pelo nosso proxy para converter HTTP em HTTPS e evitar o bloqueio do navegador.
-    return `/api/proxy-boleto?target=${encodeURIComponent(finalTarget)}`;
+    // Adicionamos a barra final para que caminhos relativos no iframe (ex: ext/js) resolvam para /api/proxy-boleto/ext/js
+    return `/api/proxy-boleto/?target=${encodeURIComponent(finalTarget)}`;
   }
 }

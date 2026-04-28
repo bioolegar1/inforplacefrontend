@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/proxy-boleto/:path*",
+      "destination": "/api/proxy-boleto.js"
+    }
+  ]
+}
