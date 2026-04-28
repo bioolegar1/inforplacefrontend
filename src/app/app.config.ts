@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withHashLocationStrategy, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -12,9 +12,10 @@ export const appConfig: ApplicationConfig = {
     // Otimização de detecção de mudanças
     provideZoneChangeDetection({ eventCoalescing: true }),
 
-    // Configuração de Rotas com restauração de scroll para o topo
+    // Configuração de Rotas com restauração de scroll e suporte a Hash para evitar 404 em servidores estáticos
     provideRouter(
       routes,
+      withHashLocationStrategy(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled'
