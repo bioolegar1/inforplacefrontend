@@ -1,0 +1,132 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-[#16a34a] p-2 rounded z-50 font-bold">
+    Pular para o conteúdo principal
+  </a>
+
+  <main id="main-content">
+
+    <app-hero [solutions]="solutions()"></app-hero>
+
+    <section id="institucional" class="relative py-10 md:py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center max-w-6xl mx-auto">
+          <div class="order-2 md:order-1">
+            <div class="aspect-video bg-gray-100 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-inner border border-gray-200">
+              <img
+                ngSrc="assets/img/inforplace.avif"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                alt="Foto da Equipe"
+                class="object-cover transform hover:scale-105 transition-transform duration-700"
+              >
+            </div>
+          </div>
+          <div class="order-1 md:order-2">
+            <span class="text-[#16a34a] font-bold uppercase tracking-wider text-xs md:text-sm">Institucional</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 mt-2">Sobre Nós</h2>
+            <p class="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
+              A Inforplace Sistemas atua no mercado de tecnologia proporcionando eficiência e resultado. O segredo dos bons resultados de uma empresa está na eficiência.
+            </p>
+            <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base">
+              Nossas ferramentas são desenvolvidas para garantir que sua gestão contábil, fiscal e administrativa opere em harmonia.
+            </p>
+            <a href="/institucional" class="text-[#16a34a] font-bold hover:underline flex items-center gap-2 text-sm md:text-base">
+              Conheça nossa história <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solucoes" class="relative py-10 md:py-20 bg-gray-100 border-y border-gray-200" aria-labelledby="solutions-title">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-8 md:mb-12">
+          <span class="text-[#16a34a] font-bold uppercase tracking-wider text-xs md:text-sm">Nossas Ferramentas</span>
+          <h2 id="solutions-title" class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-4">Soluções Completas</h2>
+          <div class="w-16 md:w-20 h-1 bg-[#16a34a] mx-auto rounded-full"></div>
+        </div>
+
+        @defer (on viewport) {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-6xl mx-auto">
+            @for (solution of solutions(); track solution.id) {
+              <article
+                [ngClass]="getCardTheme(solution.id).card"
+                class="bg-white rounded-xl p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-200 group h-full flex flex-col text-left will-change-transform">
+                <div class="flex items-center gap-3 mb-3">
+                  <div
+                    [ngClass]="getCardTheme(solution.id).iconBg"
+                    class="w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0 p-2">
+                    <img
+                      [ngSrc]="'assets/img/logo-solucoes/' + solution.icon"
+                      width="48"
+                      height="48"
+                      loading="lazy"
+                      alt=""
+                      class="w-full h-full object-contain"
+                    >
+                  </div>
+                  <h3 [ngClass]="getCardTheme(solution.id).title" class="text-lg md:text-xl font-bold text-gray-900 transition-colors leading-tight">{{ solution.name }}</h3>
+                </div>
+                <p [ngClass]="getCardTheme(solution.id).text" class="text-gray-600 text-sm leading-snug mb-4 h-[85px] line-clamp-4 transition-colors">{{ solution.description }}</p>
+
+                <div class="mt-auto w-full">
+                  @if (solution.id === 'pillar') {
+                    <a routerLink="/pillar" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o Pillar <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  } @else if (solution.id === 'safe') {
+                    <a routerLink="/safe" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o SAFE <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  } @else if (solution.id === 'obras') {
+                    <a routerLink="/obras" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o SAO <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  } @else if (solution.id === 'notainfo') {
+                    <a routerLink="/notainfo" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o Nota-Info <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  } @else if (solution.id === 'pvinfo') {
+                    <a routerLink="/pvinfo" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o PDV <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  } @else if (solution.id === 'coletorxml') {
+                    <a routerLink="/coletorxml" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o Coletor <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  }
+                  @else if (solution.id === 'pillarmobile') {
+                    <a routerLink="/pillarmobile" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Conhecer o Pillar Mobile <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                  }
+                  @else {
+                    <a href="#solucoes" [ngClass]="getCardTheme(solution.id).btn" class="w-full justify-center px-4 py-2.5 rounded-lg font-bold transition-all shadow-md hover:scale-[1.02] inline-flex items-center gap-2 text-sm">Saiba Mais <span class="material-symbols-outlined text-sm">expand_more</span></a>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        } @placeholder {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-6xl mx-auto">
+            @for (i of [1,2,3,4,5,6]; track i) {
+              <div class="bg-white rounded-xl p-5 border border-gray-200 h-full flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-12 h-12 rounded-lg bg-gray-200 animate-pulse"></div>
+                  <div class="h-6 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+                </div>
+                <div class="space-y-2 mb-4 h-[85px]">
+                  <div class="h-3 bg-gray-100 rounded w-full animate-pulse"></div>
+                  <div class="h-3 bg-gray-100 rounded w-full animate-pulse"></div>
+                  <div class="h-3 bg-gray-100 rounded w-3/4 animate-pulse"></div>
+                </div>
+                <div class="mt-auto w-full h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    @defer (on viewport) {
+      <app-latest-updates></app-latest-updates>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-50 animate-pulse"></div>
+    }
+
+    @defer (on viewport) {
+      <app-cta-contact></app-cta-contact>
+    } @placeholder {
+      <div class="h-[300px] bg-blue-900 animate-pulse"></div>
+    }
+
+  </main>
+</div>

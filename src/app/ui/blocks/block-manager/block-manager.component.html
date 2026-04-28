@@ -1,0 +1,450 @@
+<div class="block-editor-container">
+
+  <div class="blocks-list">
+    @for (block of _blocks(); track block.id; let i = $index) {
+      <div class="block-card" [attr.data-block-type]="block.type">
+
+        <div class="block-header">
+          <div class="block-info">
+            <span class="block-icon">{{ getBlockTypeIcon(block.type) }}</span>
+            <span class="block-label">{{ getBlockTypeName(block.type) }}</span>
+          </div>
+
+          <div class="block-actions">
+            <button type="button"
+                    (click)="moveBlock(i, 'up')"
+                    [disabled]="i === 0"
+                    class="action-btn"
+                    title="Mover para cima">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </button>
+
+            <button type="button"
+                    (click)="moveBlock(i, 'down')"
+                    [disabled]="i === _blocks().length - 1"
+                    class="action-btn"
+                    title="Mover para baixo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div class="action-divider"></div>
+
+            <button type="button"
+                    (click)="duplicateBlock(i)"
+                    class="action-btn"
+                    title="Duplicar bloco">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+
+            <button type="button"
+                    (click)="removeBlock(i)"
+                    class="action-btn delete-btn"
+                    title="Remover bloco">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="block-content">
+
+          @if (block.type === BlockType.HEADER) {
+            <div class="header-editor">
+              <div class="input-group">
+                <label class="input-label">Tamanho</label>
+                <select [(ngModel)]="block.data.level" class="select-input size-select">
+                  <option [ngValue]="1">Grande (H1)</option>
+                  <option [ngValue]="2">Médio (H2)</option>
+                  <option [ngValue]="3">Pequeno (H3)</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Texto do título</label>
+                <input type="text"
+                       [(ngModel)]="block.data.title"
+                       placeholder="Digite seu título aqui..."
+                       class="text-input title-input"
+                       [style.fontSize]="block.data.level === 1 ? '24px' : block.data.level === 2 ? '20px' : '18px'"
+                       [style.fontWeight]="'700'">
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.TEXT) {
+            <div class="text-editor">
+              <label class="input-label">Conteúdo</label>
+              <textarea [(ngModel)]="block.data.content"
+                        rows="5"
+                        placeholder="Escreva seu texto aqui. Você pode escrever vários parágrafos..."
+                        class="textarea-input"></textarea>
+              <div class="editor-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Dica: Quebre linhas para criar novos parágrafos
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.IMAGE) {
+            <div class="image-editor">
+              <div class="input-group">
+                <label class="input-label">Arquivo de Imagem</label>
+
+                <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div class="relative w-32 h-32 bg-white rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-blue-400 group shrink-0">
+                    @if (block.data.url) {
+                      <img [src]="block.data.url" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button type="button" (click)="imgInput.click()" class="p-2 bg-white rounded-full text-blue-600 shadow-lg">✏️</button>
+                      </div>
+                    } @else {
+                      <button type="button" (click)="imgInput.click()" class="flex flex-col items-center gap-1 text-slate-400">
+                        <span class="text-2xl">📤</span>
+                        <span class="text-[10px] font-bold uppercase">Upload</span>
+                      </button>
+                    }
+                    <input #imgInput type="file" (change)="onUploadImage($event, block)" accept="image/*" class="hidden">
+                  </div>
+
+                  <div class="flex-1 space-y-3">
+                    <div>
+                      <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Ou cole uma URL externa</label>
+                      <input type="url" [(ngModel)]="block.data.url" placeholder="https://..." class="text-input !py-2">
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                      <div class="flex-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Largura</label>
+                        <select [(ngModel)]="block.data.width" class="select-input !py-2">
+                          <option value="small">Pequena</option>
+                          <option value="medium">Media</option>
+                          <option value="large">Grande</option>
+                          <option value="full">Total</option>
+                        </select>
+                      </div>
+                      <label class="flex items-center gap-2 cursor-pointer pt-4">
+                        <input type="checkbox" [(ngModel)]="block.data.zoomable" class="rounded text-blue-600">
+                        <span class="text-xs font-medium text-slate-600">Permitir Zoom</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-group mt-4">
+                <label class="input-label">Legenda da Imagem</label>
+                <input type="text" [(ngModel)]="block.data.caption" placeholder="Ex: Tela inicial do sistema Pillar" class="text-input">
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.COMPARISON) {
+            <div class="comparison-editor space-y-4">
+
+              <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <h4 class="font-semibold text-red-700 mb-2 text-sm">Imagem: Antes</h4>
+
+                @if (block.data.imageBefore) {
+                  <div class="relative w-full h-32 mb-3 bg-gray-200 rounded overflow-hidden group">
+                    <img [src]="block.data.imageBefore" class="w-full h-full object-cover">
+                    <button (click)="fileInputBefore.click()"
+                            class="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      Trocar Imagem
+                    </button>
+                  </div>
+                }
+
+                <div class="flex items-center gap-2">
+                  <input #fileInputBefore
+                         type="file"
+                         accept="image/*"
+                         class="hidden"
+                         (change)="onUploadImage($event, block, 'imageBefore')">
+
+                  @if (!block.data.imageBefore) {
+                    <button type="button"
+                            (click)="fileInputBefore.click()"
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-medium transition-colors w-full justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      Carregar Imagem "Antes"
+                    </button>
+                  }
+                </div>
+
+                <input type="text"
+                       [(ngModel)]="block.data.captionBefore"
+                       placeholder="Legenda para o 'Antes'"
+                       class="mt-2 w-full text-sm border-gray-300 rounded p-2 border">
+              </div>
+
+              <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <h4 class="font-semibold text-green-700 mb-2 text-sm">Imagem: Depois</h4>
+
+                @if (block.data.imageAfter) {
+                  <div class="relative w-full h-32 mb-3 bg-gray-200 rounded overflow-hidden group">
+                    <img [src]="block.data.imageAfter" class="w-full h-full object-cover">
+                    <button (click)="fileInputAfter.click()"
+                            class="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      Trocar Imagem
+                    </button>
+                  </div>
+                }
+
+                <div class="flex items-center gap-2">
+                  <input #fileInputAfter
+                         type="file"
+                         accept="image/*"
+                         class="hidden"
+                         (change)="onUploadImage($event, block, 'imageAfter')">
+
+                  @if (!block.data.imageAfter) {
+                    <button type="button"
+                            (click)="fileInputAfter.click()"
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-medium transition-colors w-full justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      Carregar Imagem "Depois"
+                    </button>
+                  }
+                </div>
+
+                <input type="text"
+                       [(ngModel)]="block.data.captionAfter"
+                       placeholder="Legenda para o 'Depois'"
+                       class="mt-2 w-full text-sm border-gray-300 rounded p-2 border">
+              </div>
+
+            </div>
+          }
+
+          @if (block.type === BlockType.MODULE_HIGHLIGHT) {
+            <div class="highlight-editor">
+              <div class="highlight-preview" [attr.data-variant]="block.data.variant">
+                <div class="preview-badge">Prévia</div>
+                @if (block.data.iconUrl) {
+                  <img [src]="block.data.iconUrl" class="preview-icon" alt="Ícone">
+                }
+                @if (block.data.title) {
+                  <div class="preview-title">{{ block.data.title }}</div>
+                }
+                @if (block.data.subtitle) {
+                  <div class="preview-subtitle">{{ block.data.subtitle }}</div>
+                }
+              </div>
+
+              <div class="form-grid">
+                <div class="input-group">
+                  <label class="input-label">Título principal</label>
+                  <input type="text" [(ngModel)]="block.data.title" class="text-input" placeholder="Ex: Novo Módulo">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label">Subtítulo</label>
+                  <input type="text" [(ngModel)]="block.data.subtitle" class="text-input" placeholder="Ex: Agora disponível">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label">Link do ícone</label>
+                  <input type="url" [(ngModel)]="block.data.iconUrl" class="text-input" placeholder="https://...">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label">Cor do tema</label>
+                  <select [(ngModel)]="block.data.variant" class="select-input">
+                    <option value="primary">Azul</option>
+                    <option value="secondary">Roxo</option>
+                    <option value="accent">Rosa</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="features-section">
+                <label class="input-label">Destaques</label>
+
+                @if (block.data.features && block.data.features.length > 0) {
+                  <div class="features-list">
+                    @for (feature of block.data.features; track $index; let fIdx = $index) {
+                      <div class="feature-item">
+                        <span class="feature-bullet">✓</span>
+                        <input type="text"
+                               [(ngModel)]="block.data.features[fIdx]"
+                               class="text-input feature-input"
+                               placeholder="Ex: Interface renovada">
+                        <button type="button" (click)="removeFeature(i, fIdx)" class="feature-remove">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+
+                <button type="button" (click)="addFeature(i)" class="add-feature-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Adicionar destaque
+                </button>
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.ALERT) {
+            <div class="alert-editor">
+              <div class="alert-preview" [attr.data-alert-type]="block.data.type">
+                <div class="alert-icon">
+                  @if (block.data.type === AlertType.INFO) { ℹ️ }
+                  @if (block.data.type === AlertType.SUCCESS) { ✓ }
+                  @if (block.data.type === AlertType.WARNING) { ⚠️ }
+                  @if (block.data.type === AlertType.ERROR) { ✕ }
+                </div>
+                <div class="alert-text">
+                  <div class="alert-title">{{ block.data.title || 'Título do aviso' }}</div>
+                  <div class="alert-message">{{ block.data.message || 'Mensagem do aviso' }}</div>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Tipo de aviso</label>
+                <select [(ngModel)]="block.data.type" class="select-input">
+                  <option [value]="AlertType.INFO">ℹ️ Informação</option>
+                  <option [value]="AlertType.SUCCESS">✓ Sucesso</option>
+                  <option [value]="AlertType.WARNING">⚠️ Atenção</option>
+                  <option [value]="AlertType.ERROR">✕ Erro</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Título</label>
+                <input type="text"
+                       [(ngModel)]="block.data.title"
+                       placeholder="Digite o título do aviso"
+                       class="text-input">
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Mensagem</label>
+                <textarea [(ngModel)]="block.data.message"
+                          rows="3"
+                          placeholder="Digite a mensagem do aviso..."
+                          class="textarea-input"></textarea>
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.CHECKLIST) {
+            <div class="checklist-editor">
+              <div class="input-group">
+                <label class="input-label">Título da lista</label>
+                <input type="text"
+                       [(ngModel)]="block.data.title"
+                       placeholder="Ex: Tarefas do Projeto"
+                       class="text-input checklist-title-input">
+              </div>
+
+              <div class="checklist-items">
+                <label class="input-label">Itens da lista</label>
+
+                @if (block.data.items && block.data.items.length > 0) {
+                  <div class="items-list">
+                    @for (item of block.data.items; track $index; let itemIndex = $index) {
+                      <div class="checklist-item">
+                        <input type="checkbox"
+                               [(ngModel)]="item.checked"
+                               class="checkbox-input"
+                               [id]="'check-' + i + '-' + itemIndex">
+                        <label [for]="'check-' + i + '-' + itemIndex" class="checkbox-label">
+                          <input type="text"
+                                 [(ngModel)]="item.text"
+                                 class="text-input item-text-input"
+                                 placeholder="Digite o item..."
+                                 (click)="$event.stopPropagation()">
+                        </label>
+                        <button type="button"
+                                (click)="removeChecklistItem(i, itemIndex)"
+                                class="item-remove">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+
+                <button type="button" (click)="addChecklistItem(i)" class="add-item-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Adicionar item
+                </button>
+              </div>
+            </div>
+          }
+
+          @if (block.type === BlockType.YOUTUBE) {
+            <div class="youtube-editor">
+              <div class="input-group">
+                <label class="input-label">URL do Vídeo (YouTube)</label>
+                <input type="url"
+                       [(ngModel)]="block.data.videoUrl"
+                       placeholder="Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                       class="text-input">
+                <div class="editor-hint">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  Cole o link completo do vídeo diretamente do navegador
+                </div>
+              </div>
+
+              <div class="input-group mt-4">
+                <label class="input-label">Título do Vídeo (Opcional)</label>
+                <input type="text"
+                       [(ngModel)]="block.data.title"
+                       placeholder="Digite um título para o vídeo"
+                       class="text-input">
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+    }
+
+    @if (_blocks().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h3 class="empty-title">Comece a criar seu conteúdo</h3>
+        <p class="empty-description">Use os botões na barra lateral para adicionar blocos</p>
+      </div>
+    }
+  </div>
+
+</div>

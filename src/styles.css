@@ -1,0 +1,82 @@
+/* 1. Importações de Fontes (Devem ficar sempre no topo) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap'); */
+
+/* 2. Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. Variáveis Customizadas */
+:root {
+  --color-primary: #0ea5e9;
+  --color-secondary: #a855f7;
+}
+
+/* 4. Configuração Global do Dark Mode */
+html.dark body {
+  background-color: #020617; /* slate-950 */
+  color: #f8fafc; /* slate-50 */
+}
+
+/* Scrollbar escura (só ativa quando a classe 'dark' existe) */
+.dark ::-webkit-scrollbar {
+  width: 8px; /* Largura da barra */
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a; /* Fundo do trilho */
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155; /* A barra em si */
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* 5. Reset e Estilos Globais de Scroll */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-margin-top: 100px; /* Melhora a âncora de links */
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll; /* Evita pulo de layout */
+}
+
+/* =========================================
+   OTIMIZAÇÕES DE PERFORMANCE (CORE WEB VITALS)
+   ========================================= */
+
+/* Isolamento do Swiper */
+swiper-container {
+  display: block;
+  width: 100%;
+  height: 480px;
+  contain: strict;
+}
+
+@media (min-width: 768px) {
+  swiper-container {
+    height: 580px;
+  }
+}
+
+/* Renderização Inteligente (Content Visibility) */
+#institucional,
+#solucoes,
+app-latest-updates,
+app-cta-contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
+}

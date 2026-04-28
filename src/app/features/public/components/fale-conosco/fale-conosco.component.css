@@ -1,0 +1,31 @@
+.label-tech {
+  @apply block text-[11px] font-black text-blue-900 uppercase tracking-widest ml-1;
+}
+
+.input-tech {
+  @apply w-full px-5 py-4 rounded-xl bg-slate-50 border-2 border-slate-100 text-slate-900
+  placeholder:text-slate-300 focus:bg-white focus:border-blue-600 focus:ring-0
+  outline-none transition-all duration-300 font-medium;
+}
+
+.btn-submit-tech {
+  @apply w-full py-5 bg-blue-950 text-white rounded-2xl font-bold uppercase text-xs
+  tracking-[0.2em] flex items-center justify-center gap-3 transition-all duration-500
+  hover:bg-green-600 hover:shadow-2xl hover:shadow-green-500/20
+  disabled:opacity-20 disabled:cursor-not-allowed;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+textarea::-webkit-scrollbar { width: 0; }

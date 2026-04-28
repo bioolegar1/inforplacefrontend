@@ -1,0 +1,46 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+      tag="PDV - PONTO DE VENDA"
+      titlePrincipal="PONTO DE VENDA"
+      titleDestaque="DE ALTA PERFORMANCE"
+      description="Aumente a eficiência de seu ponto de venda. Registre vendas, estoque e ofereça um atendimento rápido aos clientes.
+            Entre em contato com a Inforplace, teremos o maior prazer em atendê-lo e lhe assessorar."
+      color="preto"
+      aspectType="auto"
+      [images]="[
+    { path: 'assets/img/solucoes-hero/pvinfo-03.avif', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/pvinfo.avif', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/pvinfo-01.avif', showSystemBar: false }
+  ]"
+      (contactClick)="handleHeroContact()"
+    />
+
+    <app-solution-features [features]="features()" color="preto" />
+    <app-faq-accordion [data]="faqs()" color="preto" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="preto"/>
+
+    @defer (on viewport) {
+      <app-latest-updates/>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-100 animate-pulse"></div>
+    }
+
+    <div id="contato">
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-gray-100 animate-pulse"></div>
+      }
+    </div>
+
+
+  </main>
+
+  <footer class="bg-gray-900 text-gray-500 py-6 md:py-8 text-center text-xs md:text-sm border-t border-gray-800">
+    © 2026 Inforplace Sistemas | <span class="text-gray-300">Tecnologia em Alta Performance</span>
+  </footer>
+
+</div>

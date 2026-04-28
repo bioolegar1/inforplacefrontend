@@ -1,0 +1,42 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+      tag="SAFE - Sistema de Gestão Empresarial"
+      titlePrincipal="SAFE - GESTÃO EMPRESARIAL"
+      titleDestaque="O SEGREDO ESTÁ NA EFICIÊNCIA"
+      description="O SAFE integra estoque, financeiro e fiscal em uma única plataforma. Elimine o retrabalho e garanta a segurança das suas informações."
+      color="verde"
+      aspectType="auto"
+      [images]="[
+    { path: 'assets/img/solucoes-hero/SAFE-01.avif', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/SAFE-02.avif', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/SAFE-03.avif', showSystemBar: true }
+  ]"
+      (contactClick)="handleHeroContact()"
+    />
+
+    <app-solution-features [features]="features()" color="verde" />
+    <app-faq-accordion [data]="faqs()" color="verde" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="verde"/>
+
+    @defer (on viewport) {
+      <app-latest-updates/>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-100 animate-pulse"></div>
+    }
+
+    <div id="contato">
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-gray-100 animate-pulse"></div>
+      }
+    </div>
+
+
+
+
+  </main>
+</div>

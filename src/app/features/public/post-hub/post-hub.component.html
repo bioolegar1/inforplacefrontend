@@ -1,0 +1,86 @@
+<div class="max-w-7xl mx-auto px-4 py-12">
+
+  <header class="text-center mb-12">
+    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Central de Conteúdo</h1>
+    <p class="text-lg text-slate-600 mb-8">Tudo o que você precisa saber sobre os sistemas Inforplace.</p>
+
+    <div class="max-w-2xl mx-auto relative">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+      <input type="text"
+             [ngModel]="searchTerm()"
+             (ngModelChange)="searchTerm.set($event)"
+             placeholder="Pesquisar por título da postagem..."
+             class="w-full pl-12 pr-4 py-4 rounded-2xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all">
+    </div>
+  </header>
+
+  <div class="mb-12 space-y-6">
+    <div>
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-3 text-center">Filtrar por Categoria</span>
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (type of postTypes; track type) {
+          <button (click)="toggleType(type)"
+                  [class]="selectedType() === type ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'"
+                  class="px-4 py-2 rounded-xl border text-sm font-medium transition-all flex items-center gap-2">
+            {{ getTypeIcon(type) }} {{ type }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div>
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-3 text-center">Filtrar por Sistema</span>
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (system of systems; track system) {
+          <button (click)="toggleSystem(system)"
+                  [class]="selectedSystem() === system ? 'bg-slate-800 text-white shadow-md' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'"
+                  class="px-4 py-2 rounded-xl border text-xs font-bold transition-all uppercase">
+            {{ system }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <hr class="border-slate-100 mb-12">
+
+  @if (isLoading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-pulse">
+      @for (i of [1,2,3]; track i) {
+        <div class="bg-slate-100 rounded-2xl aspect-video"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (post of filteredPosts(); track post.id) {
+        <article class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all group">
+          <a [routerLink]="['/posts', post.slug]">
+            <div class="aspect-video overflow-hidden bg-slate-50 relative">
+              <img [src]="post.coverImage || 'assets/placeholder.jpg'"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute top-4 left-4">
+                <span class="px-2 py-1 rounded-lg bg-white/90 backdrop-blur shadow-sm text-[10px] font-bold text-slate-900 uppercase">
+                  {{ post.productSystem }}
+                </span>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-blue-600 text-xs font-bold">{{ getTypeIcon(post.type) }} {{ post.type }}</span>
+                <span class="text-slate-400 text-[10px]">{{ post.createdAt | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <h2 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{{ post.title }}</h2>
+              <p class="text-slate-600 text-sm line-clamp-2 leading-relaxed">{{ post.summary }}</p>
+            </div>
+          </a>
+        </article>
+      } @empty {
+        <div class="col-span-full py-20 text-center">
+          <div class="text-4xl mb-4">🔍</div>
+          <h3 class="text-lg font-bold text-slate-800">Nenhum resultado encontrado</h3>
+          <p class="text-slate-500">Tente ajustar seus filtros ou termo de pesquisa.</p>
+        </div>
+      }
+    </div>
+  }
+</div>

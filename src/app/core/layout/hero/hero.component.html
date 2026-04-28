@@ -1,0 +1,204 @@
+<section class="relative overflow-hidden border-b border-gray-900/10 bg-gray-900">
+
+  <swiper-container
+    #heroSwiper
+    init="false"
+    class="w-full h-[480px] md:h-[580px]"
+  >
+    @for (solution of solutions(); track solution.id; let isFirst = $first) {
+      <swiper-slide>
+        <div
+          [ngClass]="getHeroTheme(solution.id).bg"
+          class="relative w-full h-full flex items-center text-white overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-5 blur-[120px] rounded-full pointer-events-none"></div>
+
+          <div class="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
+
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
+
+              <div class="text-center md:text-left order-2 md:order-1 flex flex-col justify-center z-20">
+
+                <div>
+                  <span class="inline-block py-1.5 px-4 rounded-full bg-white/10 border border-white/20 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md shadow-lg">
+                     Solução Inforplace
+                  </span>
+                </div>
+
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight flex flex-col md:flex-row items-center md:items-start gap-4 justify-center md:justify-start drop-shadow-lg">
+                  <div class="relative group">
+                    <div class="absolute inset-0 bg-white/20 rounded-xl blur-lg group-hover:blur-xl transition-all"></div>
+                    <img
+                      [ngSrc]="'assets/img/logo-solucoes/' + solution.icon"
+                      width="48"
+                      height="48"
+                      [priority]="isFirst"
+                      class="relative w-12 h-12 md:w-14 md:h-14 object-contain bg-white/95 rounded-xl p-1.5 shadow-xl transform group-hover:scale-110 transition-transform duration-300"
+                      alt="">
+                  </div>
+                  <span>{{ solution.name }}</span>
+                </h1>
+
+                <p class="text-sm md:text-lg text-blue-50/90 mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed font-medium line-clamp-3 md:line-clamp-none">
+                  {{ solution.description }}
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                  @if (solution.id === 'pillar') {
+                    <a routerLink="/pillar"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o Pillar
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  } @else if (solution.id === 'safe') {
+                    <a routerLink="/safe"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o SAFE
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  } @else if (solution.id === 'obras') {
+                    <a routerLink="/obras"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o SAO
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  } @else if (solution.id === 'pvinfo') {
+                    <a routerLink="/pvinfo"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o PVInfo
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  }
+                  @else if (solution.id === 'notainfo') {
+                    <a routerLink="/notainfo"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o NOTA-Info
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  }
+                  @else if (solution.id === 'coletorxml') {
+                    <a routerLink="/coletorxml"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o Coletor XML
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  }
+                  @else if (solution.id === 'pillarmobile') {
+                    <a routerLink="/pillarmobile"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Conhecer o Coletor XML
+                      <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    </a>
+                  }
+                  @else {
+                    <a href="#solucoes"
+                       [ngClass]="getHeroTheme(solution.id).btn"
+                       class="px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 inline-flex items-center justify-center gap-2 text-sm md:text-base border border-white/20">
+                      Saiba Mais
+                      <span class="material-symbols-outlined text-lg">arrow_downward</span>
+                    </a>
+                  }
+                </div>
+              </div>
+
+              <div class="order-1 md:order-2 hidden md:flex relative h-[400px] w-full items-center justify-center perspective-1000">
+
+                <div [ngClass]="getHeroTheme(solution.id).imgPanel"
+                     class="absolute top-10 right-0 w-[300px] h-[200px] rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-2xl rotate-6 opacity-60 z-0 transition-colors duration-500">
+                  <div class="h-6 w-full border-b border-white/10 flex items-center px-3 gap-1.5">
+                    <div class="w-2 h-2 rounded-full bg-white/20"></div>
+                    <div class="w-2 h-2 rounded-full bg-white/20"></div>
+                  </div>
+                  <div class="p-4 space-y-2 opacity-30">
+                    <div class="h-2 w-full bg-white rounded"></div>
+                    <div class="h-2 w-2/3 bg-white rounded"></div>
+                    <div class="h-2 w-full bg-white rounded"></div>
+                  </div>
+                </div>
+
+                <div [ngClass]="getHeroTheme(solution.id).imgPanel"
+                     class="relative w-[450px] aspect-[16/10] rounded-xl border border-white/20 bg-gray-900/90 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-10 flex flex-col overflow-hidden group/screen hover:scale-150 transition-all duration-500">
+
+                  <div class="h-8 w-full bg-white/5 border-b border-white/10 flex items-center justify-between shrink-0 select-none">
+                    <div class="flex items-center gap-2 px-3 py-1 h-full">
+                      <div class="w-3 h-3 bg-blue-500/80 rounded-[2px]"></div>
+                      <span class="text-[11px] text-white/50 font-medium tracking-wide uppercase">Inforplace Sistemas</span>
+                    </div>
+                    <div class="flex h-full items-center text-white/40">
+                      <div class="h-full w-11 flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+                      </div>
+                      <div class="h-full w-11 flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                      </div>
+                      <div class="h-full w-11 flex items-center justify-center hover:bg-[#e81123] hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="relative flex-1 w-full bg-gray-800 overflow-hidden">
+
+                    @if (solution.id === 'coletorxml' && solution.prints) {
+                      <div class="absolute inset-0 flex z-30">
+                        <div class="flex-1 h-full peer/img1"></div>
+                        <div class="flex-1 h-full peer/img2"></div>
+                        <div class="flex-1 h-full peer/img3"></div>
+                      </div>
+
+                      <img
+                        [ngSrc]="'assets/img/screens/' + solution.prints[0]"
+                        fill
+                        [priority]="isFirst"
+                        class="object-cover object-top transition-all duration-500 scale-100  opacity-100 peer-hover/img2:opacity-0 peer-hover/img3:opacity-0"
+                        alt="Tela 1">
+
+                      <img
+                        [ngSrc]="'assets/img/screens/' + solution.prints[1]"
+                        fill
+                        class="absolute inset-0 object-cover object-top transition-all duration-500 scale-100  opacity-0 peer-hover/img2:opacity-100"
+                        alt="Tela 2">
+
+                      <img
+                        [ngSrc]="'assets/img/screens/' + solution.prints[2]"
+                        fill
+                        class="absolute inset-0 object-cover object-top transition-all duration-500 scale-100  opacity-0 peer-hover/img3:opacity-100"
+                        alt="Tela 3">
+                    }
+
+                    @else {
+                      <img
+                        [ngSrc]="'assets/img/screens/' + solution.print"
+                        fill
+                        [priority]="isFirst"
+                        alt="Tela do {{ solution.name }}"
+                        class="object-cover object-top opacity-90 group-hover/screen:opacity-100 transition-all duration-500 "
+                      >
+                    }
+
+                    <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover/screen:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    }
+  </swiper-container>
+
+  <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none hidden md:block animate-bounce">
+    <div class="text-white/50 bg-white/5 p-2 rounded-full backdrop-blur-sm border border-white/10">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7m14-8l-7 7-7-7"></path></svg>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+@if (!isAdminRoute()) {
+  <app-header/>
+}
+
+<router-outlet />
+
+@if (!isAdminRoute()) {
+  @defer (on viewport) {
+      <app-footer></app-footer>
+    } @placeholder {
+      <div class="h-20 bg-gray-900"></div>
+  }
+}

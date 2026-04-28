@@ -1,0 +1,45 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+      tag="SAO - Mapa Imobiliário"
+      titlePrincipal="SAO"
+      titleDestaque="MAPA IMOBILIÁRIO"
+      description="Sistema de apuração de custo de obras. Gestão contábil e fiscal da construção civil e empreendimentos imobiliários, de acordo com as normas (POC).
+"
+      color="teal"
+      aspectType="auto"
+      [images]="[
+    { path: 'assets/img/solucoes-hero/sao-01.avif', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/sao-1.avif', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/sao-02.avif', showSystemBar: true }
+  ]"
+      (contactClick)="handleHeroContact()"
+    />
+
+
+    <app-solution-features [features]="features()" color="teal" />
+    <app-faq-accordion [data]="faqs()" color="teal" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="teal"/>
+
+    @defer (on viewport) {
+      <app-latest-updates/>
+    } @placeholder {
+      <div class="h-[400px] bg-slate-50 animate-pulse"></div>
+    }
+    <div id="contato">
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-slate-100 animate-pulse"></div>
+      }
+    </div>
+
+  </main>
+
+  <footer class="bg-gray-900 text-gray-500 py-6 md:py-8 text-center text-xs md:text-sm border-t border-teal-900">
+    © 2026 Inforplace Sistemas | <span class="text-teal-500">Sistema SAO</span>
+  </footer>
+
+</div>

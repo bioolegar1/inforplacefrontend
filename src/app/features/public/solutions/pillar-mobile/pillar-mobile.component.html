@@ -1,0 +1,43 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+      tag="Pillar Mobile"
+      titlePrincipal="APP SISTEMA PILLAR"
+      titleDestaque="GESTÃO EM TEMPO REAL"
+      description="Faça a sua gestão de compras de materiais de onde você estiver.
+Simples e prático!"
+      color="azul"
+      aspectType="mobile"
+      [images]="[
+    { path: 'assets/img/solucoes-hero/app-03.png', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/app-02.png', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/app-05.png', showSystemBar: false }
+  ]"
+      (contactClick)="handleHeroContact()"
+    />
+
+    <app-solution-features [features]="features()" color="blue" />
+    <app-faq-accordion [data]="faqs()" color="blue" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="blue"/>
+
+    @defer (on viewport) {
+      <app-latest-updates/>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-100 animate-pulse"></div>
+    }
+
+    <div id="contato">
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-gray-100 animate-pulse"></div>
+      }
+    </div>
+
+
+
+
+  </main>
+</div>

@@ -1,0 +1,47 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+      tag="Especialista em construção civil"
+      titlePrincipal="O SISTEMA PILLAR"
+      titleDestaque="INOVARÁ A Gestão DE construtoras e incorporadoras."
+      description="  Gestão completa para construtoras e incorporadoras. Do canteiro de obras ao escritório, tenha controle total dos custos e prazos."
+      color="blue"
+      aspectType="auto"
+      [images]="[
+    { path: 'assets/img/solucoes-hero/Pillar-tela.avif', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/pillar-engenheiro_laptop.avif', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/pillar-03.webp', showSystemBar: true }
+  ]"
+      (contactClick)="handleHeroContact()"
+    />
+
+    <app-solution-features [features]="features()" color="blue" />
+    <app-faq-accordion [data]="faqs()" color="blue" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="blue"/>
+
+
+
+
+    @defer (on viewport) {
+      <app-latest-updates></app-latest-updates>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-50 animate-pulse"></div>
+    }
+
+    <div #contato>
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-slate-100 animate-pulse"></div>
+      }
+    </div>
+
+  </main>
+
+  <footer class="bg-gray-900 text-gray-500 py-6 md:py-8 text-center text-xs md:text-sm border-t border-green-900">
+    © 2026 Inforplace Sistemas | <span class="text-[#16a34a]">Sistema Pillar</span>
+  </footer>
+
+</div>

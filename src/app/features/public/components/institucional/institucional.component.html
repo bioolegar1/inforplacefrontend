@@ -1,0 +1,147 @@
+<main class="min-h-screen bg-white">
+  <section class="relative h-[60vh] flex items-center justify-center overflow-hidden bg-blue-950">
+    <div class="absolute inset-0 z-0 opacity-40">
+      <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2070"
+           alt="Background Inforplace" class="w-full h-full object-cover">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-950/80 to-[#14532d]/90 z-10"></div>
+
+    <div class="container mx-auto px-4 z-20 text-center text-white">
+      <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight animate-fade-in">
+        {{ companyInfo.titulo }}
+      </h1>
+      <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto opacity-90">
+        {{ companyInfo.subtitulo }}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-20 container mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="relative">
+        <div class="absolute -top-4 -left-4 w-24 h-24 bg-green-500/10 rounded-full -z-10"></div>
+        <h2 class="text-4xl font-bold text-blue-950 mb-8 border-l-4 border-green-600 pl-6">
+          Nossa Trajetória
+        </h2>
+        <div class="space-y-6 text-gray-600 text-lg leading-relaxed">
+          <p>{{ companyInfo.resumo }}</p>
+          <p>{{ companyInfo.detalhes }}</p>
+          <div class="pt-4">
+            <span class="text-5xl font-bold text-green-600">+{{ 2026 - companyInfo.desde }}</span>
+            <span class="ml-3 text-gray-500 font-medium uppercase tracking-widest">Anos de Experiência</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <img src="../../../../../assets/img/inforplace.avif" class="rounded-2xl shadow-lg mt-8" alt="Equipe">
+        <img src="../../../../../assets/img/notebook-pillar-institucional.png" class="rounded-2xl shadow-lg" alt="Tecnologia">
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-white overflow-hidden">
+    <div class="container mx-auto px-4">
+
+      <div class="flex flex-col items-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-black text-blue-950 uppercase tracking-tighter">Nossa Essência</h2>
+        <div class="w-20 h-1.5 bg-green-600 mt-4 rounded-full"></div>
+      </div>
+
+      <div class="max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+          <div class="lg:col-span-4 flex flex-col gap-4">
+
+            <button (click)="setFocus('missao')"
+                    [class]="activePillar() === 'missao' ? 'border-green-600 bg-green-50 shadow-xl scale-105' : 'border-gray-100 hover:border-blue-200 bg-white'"
+                    class="group w-full flex items-center p-6 rounded-2xl border-2 transition-all duration-500 text-left">
+              <div [class]="activePillar() === 'missao' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-950 group-hover:text-white'"
+                   class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-500">
+                <span class="material-symbols-outlined">rocket_launch</span>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-bold text-lg" [class.text-blue-950]="activePillar() === 'missao'">Missão</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Propósito e Ação</p>
+              </div>
+            </button>
+
+            <button (click)="setFocus('visao')"
+                    [class]="activePillar() === 'visao' ? 'border-blue-950 bg-blue-50 shadow-xl scale-105' : 'border-gray-100 hover:border-blue-200 bg-white'"
+                    class="group w-full flex items-center p-6 rounded-2xl border-2 transition-all duration-500 text-left">
+              <div [class]="activePillar() === 'visao' ? 'bg-blue-950 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-950 group-hover:text-white'"
+                   class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-500">
+                <span class="material-symbols-outlined">visibility</span>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-bold text-lg" [class.text-blue-950]="activePillar() === 'visao'">Visão</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Futuro e Metas</p>
+              </div>
+            </button>
+
+            <button (click)="setFocus('valores')"
+                    [class]="activePillar() === 'valores' ? 'border-blue-800 bg-blue-50 shadow-xl scale-105' : 'border-gray-100 hover:border-blue-200 bg-white'"
+                    class="group w-full flex items-center p-6 rounded-2xl border-2 transition-all duration-500 text-left">
+              <div [class]="activePillar() === 'valores' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-950 group-hover:text-white'"
+                   class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-500">
+                <span class="material-symbols-outlined">verified_user</span>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-bold text-lg" [class.text-blue-950]="activePillar() === 'valores'">Valores</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Cultura e Ética</p>
+              </div>
+            </button>
+          </div>
+
+          <div class="lg:col-span-8 bg-gray-50 rounded-3xl p-8 md:p-16 min-h-[450px] flex items-center relative overflow-hidden border border-gray-100">
+
+            <div class="absolute -bottom-10 -right-10 opacity-5 pointer-events-none">
+              <span class="material-symbols-outlined text-[200px]">hub</span>
+            </div>
+
+            <div class="relative z-10 w-full">
+              @if (activePillar() === 'missao') {
+                <div @tabAnimation class="flex flex-col">
+                  <span class="text-green-600 font-black text-6xl mb-6">01.</span>
+                  <h4 class="text-3xl font-bold text-blue-950 mb-6 italic leading-tight">
+                    "Garantir a tranquilidade e a evolução contínua dos nossos parceiros através da tecnologia."
+                  </h4>
+                  <p class="text-gray-600 text-lg max-w-xl">
+                    Na Inforplace, nossa missão não é apenas entregar software, mas sim prover a segurança necessária para que o empresário foque no que realmente importa: seu crescimento.
+                  </p>
+                </div>
+              }
+
+              @else if (activePillar() === 'visao') {
+                <div @tabAnimation class="flex flex-col">
+                  <span class="text-blue-950 font-black text-6xl mb-6">02.</span>
+                  <h4 class="text-3xl font-bold text-blue-950 mb-6 italic leading-tight">
+                    "Ser a escolha definitiva em alta performance de gestão e automação comercial no Brasil."
+                  </h4>
+                  <p class="text-gray-600 text-lg max-w-xl">
+                    Projetamos um futuro onde a automação inteligente reduz processos burocráticos ao mínimo, tornando a gestão uma experiência fluida e precisa.
+                  </p>
+                </div>
+              }
+
+              @else {
+                <div @tabAnimation class="grid md:grid-cols-2 gap-6">
+                  @for (v of diferenciais; track v.title) {
+                    <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                      <span class="material-symbols-outlined text-3xl text-green-600 mb-4">{{ v.icon }}</span>
+                      <h5 class="font-black text-blue-950 uppercase tracking-wider mb-2">{{ v.title }}</h5>
+                      <p class="text-sm text-gray-500 leading-relaxed">{{ v.desc }}</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-cta-contact/>

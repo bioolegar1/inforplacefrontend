@@ -1,0 +1,55 @@
+<section class="py-10 md:py-20 bg-gray-50">
+  <div class="container mx-auto px-4 max-w-3xl">
+
+    <div class="text-center mb-12">
+      <span class="font-bold uppercase tracking-wider text-[10px] md:text-xs"
+            [ngClass]="colorClasses.textHighlight">
+        Tire suas dúvidas
+      </span>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2">Dúvidas Frequentes</h2>
+
+      <div class="w-16 md:w-20 h-1 mx-auto rounded-full mt-4"
+           [ngStyle]="colorClasses.lineStyle">
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      @for (faq of data(); track $index) {
+        <div #card
+             (mouseenter)="card.classList.add('hover-active')"
+             (mouseleave)="card.classList.remove('hover-active')"
+             class="bg-white rounded-xl border-2 shadow-xl transition-all duration-300 transform hover:scale-[1.10] hover:shadow-2xl"
+             [style.border-color]="card.classList.contains('hover-active') ? colorClasses.hoverColor : '#f3f4f6'">
+          <button
+            (click)="toggleAccordion($index)"
+            class="w-full flex items-center justify-between p-4 md:p-5 text-left focus:outline-none bg-white group rounded-xl">
+
+        <span class="font-bold text-gray-800 text-sm md:text-base transition-colors duration-300  rounded-xl"
+              [ngClass]="colorClasses.textHover">
+          {{ faq.question }}
+        </span>
+
+            <span class="material-symbols-outlined transition-all duration-300"
+                  [ngClass]="[colorClasses.iconColor, activeAccordion() === $index ? 'rotate-180' : '']">
+          expand_more
+        </span>
+          </button>
+
+          <div
+            class="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl "
+            [ngClass]="colorClasses.contentBg"
+            [style.max-height]="activeAccordion() === $index ? '300px' : '0px'"
+            [style.opacity]="activeAccordion() === $index ? '1' : '0'">
+
+            <div class="p-4 md:p-5 pt-2 text-gray-600 text-sm leading-relaxed border-t rounded-bl-xl"
+                 [ngClass]="[colorClasses.contentBorder, colorClasses.contentAccent]">
+              {{ faq.answer }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+
+</section>

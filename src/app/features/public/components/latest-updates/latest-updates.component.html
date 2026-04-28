@@ -1,0 +1,52 @@
+<section class="py-10 bg-[#2D5380] border-t border-gray-100">
+  <div class="container mx-auto px-4">
+
+    <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
+      <div class="text-left">
+        <span class="text-orange-500 font-bold uppercase tracking-wider text-sm">Release Hub</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-blue-50 mt-2">Novidades e Atualizações</h2>
+      </div>
+      <a routerLink="/posts" class="hidden md:inline-flex items-center gap-2 text-blue-100 font-bold hover:text-white transition-colors group">
+        Ver todas as atualizações
+        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (post of updates(); track post.id) {
+        @let style = getStyle(post.productSystem);
+
+        <article [class]="'relative bg-gray-100 border border-gray-200 rounded-2xl p-6 flex flex-col h-full ' + style.card">
+
+          <div class="flex items-center justify-between mb-4">
+            <time class="text-xs font-medium text-gray-500 flex items-center gap-1 group-hover:text-blue-100">
+              {{ post.createdAt | date:'dd MMM, yyyy' }}
+            </time>
+            <span [class]="'px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ' + style.iconBg">
+              {{ post.productSystem }}
+            </span>
+          </div>
+
+          <h3 [class]="'text-xl font-bold text-gray-900 mb-3 transition-colors ' + style.title">
+            <a [routerLink]="['/posts', post.slug]" class="focus:outline-none">
+              <span class="absolute inset-0" aria-hidden="true"></span>
+              {{ post.title }}
+            </a>
+          </h3>
+
+          <p [class]="'leading-relaxed mb-4 flex-grow line-clamp-3 transition-colors ' + style.text">
+            {{ post.summary }}
+          </p>
+
+          <div [class]="'flex items-center text-sm font-bold mt-auto transition-colors ' + style.detail">
+            Saiba mais
+            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </article>
+      }
+    </div>
+
+  </div>
+</section>

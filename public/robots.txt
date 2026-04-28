@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Opcional: Bloquear rotas que não devem aparecer no Google
+Disallow: /admin/
+Disallow: /login/
+
+# Importante: Indique onde estará o seu sitemap
+Sitemap: https://www.inforplace.com.br/sitemap.xml

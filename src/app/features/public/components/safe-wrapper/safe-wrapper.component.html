@@ -1,0 +1,14 @@
+<div class="container">
+  @if (iframeUrl) {
+    <iframe
+      [src]="iframeUrl"
+      width="100%"
+      height="700px"
+      frameborder="0">
+    </iframe>
+  } @else {
+    <div>
+      Carregando conexão...
+    </div>
+  }
+</div>

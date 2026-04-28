@@ -1,0 +1,35 @@
+<app-hero-solution
+  tag="GESTÃO DE DOCUMENTOS FISCAIS"
+  titlePrincipal="Coletor de"
+  titleDestaque="XML de NF-e e CT-e"
+  description="Coletor é programa que faz a baixa de XML de NF-e e CT-e, dando ciência automaticamente."
+  color="orange"
+  aspectType="auto"
+  [images]="[
+    { path: 'assets/img/solucoes-hero/print-coletor-2.png', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/print-coletor.png', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/print-coletor-3.png', showSystemBar: true }
+  ]"
+  (contactClick)="handleHeroContact()"
+/>
+
+<app-solution-features [features]="features()" color="orange" />
+<app-faq-accordion [data]="coletorFaqs()" color="orange" />
+
+@defer (on viewport) {
+  <app-latest-updates></app-latest-updates>
+} @placeholder {
+  <div class="h-[400px] bg-gray-100 animate-pulse"></div>
+}
+
+<div id="contato">
+  @defer (on viewport) {
+    <app-cta-contact></app-cta-contact>
+  } @placeholder {
+    <div class="h-[300px] bg-gray-100 animate-pulse"></div>
+  }
+</div>
+
+<footer class="bg-slate-900 text-gray-500 py-6 md:py-8 text-center text-xs md:text-sm border-t border-slate-800">
+  © 2026 Inforplace Sistemas | <span class="text-sky-500">Notainfo</span>
+</footer>

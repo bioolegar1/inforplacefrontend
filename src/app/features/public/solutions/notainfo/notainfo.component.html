@@ -1,0 +1,44 @@
+<div class="font-sans text-gray-700 antialiased bg-white">
+
+  <main>
+
+    <app-hero-solution
+    tag="Solução Fiscal"
+    titlePrincipal="NOTA Info"
+    titleDestaque="Emissor de Nota Fiscal"
+    description="Sistema emissor de nota fiscal eletrônica NF-e, emite nota fiscal em poucos cliques para sua empresa, simples e fácil de usar. Entre em contato com a Inforplace, teremos o maior prazer em atendê-lo e lhe assessorar."
+    color="sky"
+    aspectType="auto"
+    [images]="[
+    { path: 'assets/img/solucoes-hero/nfi-01.avif', showSystemBar: true },
+    { path: 'assets/img/solucoes-hero/nfi-02.avif', showSystemBar: false },
+    { path: 'assets/img/solucoes-hero/nfi-03.avif', showSystemBar: true }
+  ]"
+    (contactClick)="handleHeroContact()"
+    />
+
+    <app-solution-features [features]="features()" color="sky" />
+    <app-faq-accordion [data]="faqs()" color="sky" />
+    <app-testimonials  title="Clientes que confiam na Inforplace" color="sky"/>
+
+    @defer (on viewport) {
+      <app-latest-updates/>
+    } @placeholder {
+      <div class="h-[400px] bg-gray-100 animate-pulse"></div>
+    }
+
+    <div id="contato">
+      @defer (on viewport) {
+        <app-cta-contact/>
+      } @placeholder {
+        <div class="h-[300px] bg-gray-100 animate-pulse"></div>
+      }
+    </div>
+
+  </main>
+
+  <footer class="bg-slate-900 text-gray-500 py-6 md:py-8 text-center text-xs md:text-sm border-t border-slate-800">
+    © 2026 Inforplace Sistemas | <span class="text-sky-500">Notainfo</span>
+  </footer>
+
+</div>
