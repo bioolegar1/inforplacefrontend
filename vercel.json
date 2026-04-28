@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/api/proxy-boleto/(.*)",
+      "source": "/api/proxy-boleto/:match*",
       "destination": "/api/proxy-boleto"
     },
     {
