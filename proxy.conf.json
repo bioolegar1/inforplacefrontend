@@ -1,4 +1,18 @@
 {
+  "/api/proxy-boleto": {
+    "target": "http://inforplace.ddns.net:12019",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/proxy-boleto": ""
+    },
+    "logLevel": "debug",
+    "router": (req) => {
+      // Lógica dinâmica para o roteador do proxy no desenvolvimento
+      const url = new URL(req.url, "http://localhost");
+      return url.searchParams.get("target") || "http://inforplace.ddns.net:12019";
+    }
+  },
   "/api": {
     "target": "http://localhost:8080",
     "secure": false,

@@ -35,12 +35,21 @@ export class IpValidationService {
         finalTarget = `http://${this.DDNS_NAME}:${this.PORT}`;
       }
 
-      // Retorna a URL através do nosso proxy seguro para evitar erros de Mixed Content
+      // Em desenvolvimento local (localhost), usamos a URL direta para evitar complexidade de proxy no dev-server.
+      // Em produção, usamos o nosso proxy seguro para evitar Mixed Content.
+      if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+        return finalTarget;
+      }
+
       return `/api/proxy-boleto?target=${encodeURIComponent(finalTarget)}`;
     } catch (error) {
-      // Caso ocorra erro (ex: bloqueio de CORS ou DNS), redireciona para o DDNS via proxy por padrão
       console.error('Erro na validação de IP:', error);
       const fallbackTarget = `http://${this.DDNS_NAME}:${this.PORT}`;
+      
+      if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+        return fallbackTarget;
+      }
+      
       return `/api/proxy-boleto?target=${encodeURIComponent(fallbackTarget)}`;
     }
   }
