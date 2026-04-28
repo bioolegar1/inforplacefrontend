@@ -1,8 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/api/proxy-boleto/:path*",
-      "destination": "/api/proxy-boleto.js"
+      "source": "/api/proxy-boleto/(.*)",
+      "destination": "/api/proxy-boleto"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

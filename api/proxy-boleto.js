@@ -1,19 +1,22 @@
 export default async function handler(req, res) {
   const { target: queryTarget } = req.query;
   const targetCookieName = 'proxy-target-host';
+  const proxyPath = '/api/proxy-boleto';
   
   let targetBase = '';
 
-  // 1. Identificar o Target Host
+  // 1. Identificar o Target Host (DDNS)
   if (queryTarget) {
     try {
       const urlObj = new URL(queryTarget);
+      // Remove o arquivo (se houver) e mantém apenas o diretório base
       const lastSlash = urlObj.pathname.lastIndexOf('/');
       const basePath = urlObj.pathname.substring(0, lastSlash + 1);
       targetBase = `${urlObj.protocol}//${urlObj.host}${basePath}`;
       
+      // Salva o host no cookie para requisições subsequentes de assets
       res.setHeader('Set-Cookie', [
-        `${targetCookieName}=${encodeURIComponent(targetBase)}; Path=/api/proxy-boleto; HttpOnly; SameSite=Lax; Max-Age=3600`
+        `${targetCookieName}=${encodeURIComponent(targetBase)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`
       ]);
     } catch (e) {
       console.error('Invalid target URL:', queryTarget);
@@ -27,109 +30,74 @@ export default async function handler(req, res) {
   }
 
   if (!targetBase) {
-    return res.status(400).send('URL de destino não encontrada. Use o parâmetro ?target= na primeira chamada.');
+    return res.status(400).send('URL de destino não encontrada. O proxy precisa ser iniciado com ?target=');
   }
 
-  // 2. Construir a URL final de destino
+  // 2. Determinar o sub-caminho solicitado
+  // Ex: /api/proxy-boleto/uni-1.90/css/... -> /uni-1.90/css/...
   const fullUrl = new URL(req.url, `https://${req.headers.host || 'localhost'}`);
-  let subPath = fullUrl.pathname.replace('/api/proxy-boleto', '');
-  if (subPath.startsWith('/')) subPath = subPath.substring(1);
+  let subPath = fullUrl.pathname.replace(proxyPath, '');
+  if (!subPath.startsWith('/')) subPath = '/' + subPath;
 
+  // Se houver queryTarget e for a página inicial, ignoramos o subPath
   let fetchUrl;
-  if (queryTarget && (subPath === '' || subPath === 'index.dll' || subPath === 'index.html')) {
+  if (queryTarget && (subPath === '/' || subPath === '/index.dll' || subPath === '/index.html')) {
     fetchUrl = queryTarget;
   } else {
-    fetchUrl = targetBase.replace(/\/$/, '') + '/' + subPath.replace(/^\//, '') + fullUrl.search;
-  }
-
-  const finalFetchUrl = new URL(fetchUrl);
-  finalFetchUrl.searchParams.delete('target');
-
-  // 3. Preparar headers para o fetch
-  const forwardHeaders = { ...req.headers };
-  delete forwardHeaders.host;
-  delete forwardHeaders.connection;
-  delete forwardHeaders.referer;
-
-  // Filtrar cookies: remover o cookie do proxy e manter os do uniGUI
-  if (forwardHeaders.cookie) {
-    forwardHeaders.cookie = forwardHeaders.cookie
-      .split(';')
-      .map(c => c.trim())
-      .filter(c => !c.startsWith(targetCookieName + '='))
-      .join('; ');
+    fetchUrl = targetBase.replace(/\/$/, '') + subPath + fullUrl.search;
   }
 
   try {
-    const response = await fetch(finalFetchUrl.toString(), {
+    const forwardHeaders = { ...req.headers };
+    delete forwardHeaders.host;
+    delete forwardHeaders.connection;
+    delete forwardHeaders.referer;
+
+    const response = await fetch(fetchUrl, {
       method: req.method,
       headers: forwardHeaders,
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? (typeof req.body === 'object' ? JSON.stringify(req.body) : req.body) : undefined,
-      redirect: 'manual'
+      redirect: 'follow'
     });
 
-    // 4. Repassar headers de resposta
-    const contentType = response.headers.get('content-type') || 'application/octet-stream';
+    const contentType = response.headers.get('content-type') || '';
     res.setHeader('Content-Type', contentType);
-    
-    // Headers de segurança para Iframe
     res.setHeader('X-Frame-Options', 'ALLOWALL');
     res.setHeader('Content-Security-Policy', "frame-ancestors *");
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-    // Repassar cookies do sistema legado (Set-Cookie)
-    // Usamos getSetCookie para pegar múltiplos headers Set-Cookie se disponíveis
-    const setCookies = (response.headers.getSetCookie && response.headers.getSetCookie()) || [];
+    // Repassar cookies de sessão
+    const setCookies = response.headers.getSetCookie?.() || [];
     if (setCookies.length > 0) {
-      // Ajustar path dos cookies legados para que o browser os envie de volta via proxy
-      const adjustedCookies = setCookies.map(c => {
-        if (c.toLowerCase().includes('path=/')) {
-           return c.replace(/path=\/[^;]*/i, 'Path=/api/proxy-boleto');
-        }
-        return c + '; Path=/api/proxy-boleto';
-      });
-      res.setHeader('Set-Cookie', [
-        ...(res.getHeader('Set-Cookie') || []),
-        ...adjustedCookies
-      ]);
+      res.setHeader('Set-Cookie', setCookies.map(c => c.replace(/Path=\/[^;]*/i, 'Path=/')));
     }
 
-    // 5. Tratar redirecionamentos
-    if (response.status >= 300 && response.status < 400) {
-      const location = response.headers.get('location');
-      if (location) {
-        // Se o redirecionamento for absoluto para o servidor legado, trazemos de volta para o proxy
-        const legacyBase = new URL(targetBase);
-        if (location.startsWith(legacyBase.origin) || !location.startsWith('http')) {
-           const relativeLocation = location.replace(legacyBase.origin, '');
-           const proxyLocation = `/api/proxy-boleto${relativeLocation.startsWith('/') ? '' : '/'}${relativeLocation}`;
-           res.setHeader('Location', proxyLocation);
-        } else {
-           res.setHeader('Location', location);
-        }
-      }
-      return res.status(response.status).end();
-    }
-
-    // 6. Retornar conteúdo
-    if (contentType.includes('text') || contentType.includes('javascript') || contentType.includes('json') || contentType.includes('xml')) {
+    if (contentType.includes('text/html') || contentType.includes('application/javascript') || contentType.includes('text/css')) {
       let body = await response.text();
       
-      if (contentType.includes('text/html')) {
-        const baseHref = `https://${req.headers.host}/api/proxy-boleto/`;
-        if (body.includes('<head>')) {
-          body = body.replace('<head>', `<head><base href="${baseHref}">`);
-        } else {
-          body = `<base href="${baseHref}">${body}`;
-        }
+      // REESCRITA DE URLS:
+      // Esta é a parte crucial. Substituímos referências que começam com "/" 
+      // para passarem pelo nosso proxy.
+      // Ex: src="/uni-1.90/..." -> src="/api/proxy-boleto/uni-1.90/..."
+      
+      const escapedProxyPath = proxyPath.replace(/\//g, '\\/');
+      
+      // Substitui src="/, href="/, url('/ e caminhos em JS do uniGUI
+      body = body.replace(/(src|href)=["']\/([^"']+)["']/g, `$1="${proxyPath}/$2"`);
+      body = body.replace(/url\(["']?\/([^"']+)["']?\)/g, `url("${proxyPath}/$1")`);
+      
+      // Ajuste específico para o motor uniGUI/ExtJS que usa caminhos em strings JS
+      if (contentType.includes('text/html') || contentType.includes('javascript')) {
+         // Tenta capturar caminhos comuns do uniGUI que começam com / e não foram pegos acima
+         body = body.replace(/["']\/(uni-[0-9]|ext-[0-9]|falcon|jQuery)([^"']+)["']/g, `"${proxyPath}/$1$2"`);
       }
+
       return res.status(response.status).send(body);
     } else {
       const buffer = await response.arrayBuffer();
       return res.status(response.status).send(Buffer.from(buffer));
     }
   } catch (error) {
-    console.error('Proxy Error:', error);
-    return res.status(500).send('Erro no Proxy: ' + error.message);
+    console.error('Proxy Fetch Error:', error);
+    return res.status(500).send('Erro ao buscar recurso no servidor de boletos: ' + error.message);
   }
 }
