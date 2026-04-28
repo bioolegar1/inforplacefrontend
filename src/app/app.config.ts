@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withHashLocationStrategy, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withHashLocation, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     // Configuração de Rotas com restauração de scroll e suporte a Hash para evitar 404 em servidores estáticos
     provideRouter(
       routes,
-      withHashLocationStrategy(),
+      withHashLocation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled'
