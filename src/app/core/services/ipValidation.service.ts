@@ -12,7 +12,14 @@ export class IpValidationService {
   constructor() {}
 
   async getFinalUrl(): Promise<string> {
-    // Retorna diretamente a URL solicitada
-    return `http://${this.DDNS_NAME}:${this.PORT}`;
+    const finalTarget = `http://${this.DDNS_NAME}:${this.PORT}/`;
+
+    // Em desenvolvimento local (localhost), usamos a URL direta.
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      return finalTarget;
+    }
+
+    // Na Vercel, passamos pelo nosso proxy para converter HTTP em HTTPS e evitar o bloqueio do navegador.
+    return `/api/proxy-boleto?target=${encodeURIComponent(finalTarget)}`;
   }
 }
