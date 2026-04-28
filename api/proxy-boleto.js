@@ -1,20 +1,40 @@
 export default async function handler(req, res) {
-  const target = 'http://inforplace.ddns.net:12019/';
+  const DDNS_HOST = 'http://inforplace.ddns.net:12019';
+  const proxyPath = '/api/proxy-boleto';
   
+  // Pega o caminho real solicitado (ex: /uni-1.90/...)
+  const fullUrl = new URL(req.url, `https://${req.headers.host || 'localhost'}`);
+  let subPath = fullUrl.pathname.replace(proxyPath, '');
+  
+  // Monta a URL final para buscar no seu servidor
+  const fetchUrl = `${DDNS_HOST}${subPath}${fullUrl.search}`;
+
   try {
-    // Busca o conteúdo original
-    const response = await fetch(target);
+    const response = await fetch(fetchUrl, {
+      method: req.method,
+      headers: {
+        'Accept': req.headers.accept || '*/*',
+        'User-Agent': req.headers['user-agent'] || '',
+        'Cookie': req.headers.cookie || ''
+      }
+    });
+
     const contentType = response.headers.get('content-type');
     const buffer = await response.arrayBuffer();
 
-    // Entrega exatamente o que recebeu, mas via HTTPS (Vercel)
-    res.setHeader('Content-Type', contentType || 'text/html');
+    // Entrega o arquivo ORIGINAL, sem nenhuma alteração (tradução)
+    res.setHeader('Content-Type', contentType || 'application/octet-stream');
     res.setHeader('X-Frame-Options', 'ALLOWALL');
     res.setHeader('Content-Security-Policy', "frame-ancestors *");
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-    return res.send(Buffer.from(buffer));
+    // Repassa cookies originais
+    const setCookies = response.headers.getSetCookie?.() || [];
+    if (setCookies.length > 0) res.setHeader('Set-Cookie', setCookies);
+
+    return res.status(response.status).send(Buffer.from(buffer));
+
   } catch (error) {
-    return res.status(500).send('Erro ao carregar o boleto.');
+    return res.status(500).send('Erro na conexão com o servidor de boletos.');
   }
 }

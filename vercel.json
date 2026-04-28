@@ -5,6 +5,22 @@
       "destination": "/api/proxy-boleto"
     },
     {
+      "source": "/uni-:path*",
+      "destination": "/api/proxy-boleto/uni-:path*"
+    },
+    {
+      "source": "/ext-:path*",
+      "destination": "/api/proxy-boleto/ext-:path*"
+    },
+    {
+      "source": "/falcon/:path*",
+      "destination": "/api/proxy-boleto/falcon/:path*"
+    },
+    {
+      "source": "/jQuery/:path*",
+      "destination": "/api/proxy-boleto/jQuery/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
