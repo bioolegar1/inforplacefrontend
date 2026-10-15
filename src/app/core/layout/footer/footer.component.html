@@ -45,13 +45,13 @@
         <h4 class="font-bold text-lg mb-6 text-white border-l-4 border-[#16a34a] pl-3">Contato</h4>
         <address class="not-italic text-gray-400 space-y-4 text-sm">
 
-          <a href="https://wa.me/556232851464" target="_blank" class="flex items-start gap-3 group hover:bg-gray-800/50 p-2 -ml-2 rounded-lg transition-colors">
+          <a [href]="company.whatsappUrl" target="_blank" class="flex items-start gap-3 group hover:bg-gray-800/50 p-2 -ml-2 rounded-lg transition-colors">
             <div class="bg-gray-800 p-2 rounded-lg text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
               <span class="material-symbols-outlined text-sm">call</span>
             </div>
             <div>
               <p class="font-bold text-white group-hover:text-[#16a34a] transition-colors">WhatsApp / Telefone</p>
-              <p>(62) 3285-1464</p>
+              <p>{{ company.phone }}</p>
             </div>
           </a>
 

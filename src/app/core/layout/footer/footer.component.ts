@@ -1,4 +1,5 @@
 import { Component,ChangeDetectionStrategy } from '@angular/core';
+import { COMPANY_INFO } from '../../constants/company-info';
 import { RouterLink } from '@angular/router'; // <--- Importante
 
 @Component({
@@ -9,4 +10,6 @@ import { RouterLink } from '@angular/router'; // <--- Importante
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css'
 })
-export class FooterComponent {}
+export class FooterComponent {
+  readonly company = COMPANY_INFO;
+}

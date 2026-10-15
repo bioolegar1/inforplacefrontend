@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { COMPANY_INFO } from '../../constants/company-info';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -19,6 +20,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   `]
 })
 export class CtaContactComponent implements OnInit, OnDestroy {
+  readonly company = COMPANY_INFO;
+
 
   titleText = signal('');
   private readonly fullTitle = "Precisa de Atendimento Especializado?";

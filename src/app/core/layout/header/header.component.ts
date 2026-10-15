@@ -1,4 +1,5 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { COMPANY_INFO } from '../../constants/company-info';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router'; // <--- Removi o RouterLinkActive daqui
 @Component({
@@ -9,6 +10,8 @@ import { RouterLink } from '@angular/router'; // <--- Removi o RouterLinkActive 
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
+  readonly company = COMPANY_INFO;
+
 
   // 1. Estado do Menu Mobile (Signals)
   isMobileMenuOpen = signal(false);

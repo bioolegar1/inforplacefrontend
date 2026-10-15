@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { COMPANY_INFO } from '../../../../core/constants/company-info';
 import { ContactService } from '../../../../core/services/contact.service';
 
 @Component({
@@ -18,12 +19,7 @@ export class FaleConoscoComponent {
   readonly showSuccess = signal(false);
   readonly contactForm: FormGroup;
 
-  readonly contactInfo = {
-    phone: '(62) 3285-1464',
-    whatsapp: '556232851464',
-    email: 'contato@inforplace.com.br',
-    address: 'Goiânia - GO, Brasil'
-  };
+  readonly contactInfo = COMPANY_INFO;
 
   constructor() {
     this.contactForm = this.fb.group({
