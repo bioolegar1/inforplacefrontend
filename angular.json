@@ -85,6 +85,15 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "development-csr": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "ssr": false,
+              "server": false,
+              "outputMode": "static"
             }
           },
           "defaultConfiguration": "production"
@@ -94,7 +103,10 @@
           "options": {
             "ssl": true,
             "proxyConfig": "proxy.conf.json",
-            "allowedHosts": ["localhost", "127.0.0.1"]
+            "allowedHosts": [
+              "localhost",
+              "127.0.0.1"
+            ]
           },
           "configurations": {
             "production": {
@@ -102,6 +114,9 @@
             },
             "development": {
               "buildTarget": "frontend-web:build:development"
+            },
+            "development-csr": {
+              "buildTarget": "frontend-web:build:development-csr"
             }
           },
           "defaultConfiguration": "development"
